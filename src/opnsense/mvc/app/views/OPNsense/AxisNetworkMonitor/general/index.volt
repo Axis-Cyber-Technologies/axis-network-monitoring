@@ -3,26 +3,29 @@
 {% block title %}{{ lang._('Axis Network Monitor') }}{% endblock %}
 
 {% block content %}
-    <div class="content-box" id="axis-monitor-root">
+    <div class="content-box">
         <div class="content-box-main">
+            <div class="pull-right">
+                <a class="btn btn-primary" href="/ui/axisnetworkmonitor/general/">{{ lang._('Launch Setup Wizard') }}</a>
+            </div>
             <h2>{{ friendlyName }}</h2>
-            <p>{{ greeting }}</p>
-            <p class="text-muted">
-                {{ lang._('Setup is complete. Continue by adding dashboards, data sources, and policy workflows.') }}
-            </p>
+            <p>{{ lang._('The single-page dashboard is under active development. Use the navigation menu to explore upcoming sections or revisit the Setup Wizard to adjust configuration.') }}</p>
+            <div id="axis-spa-root"></div>
+        </div>
+    </div>
 
-            <div class="panel panel-default" data-bind="with: logs">
+    <div class="content-box" id="axis-monitor-log-root">
+        <div class="content-box-main" data-bind="with: logs">
+            <h3>{{ lang._('Activity Log') }}</h3>
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    <strong>{{ lang._('Activity Log') }}</strong>
-                    <div class="pull-right">
-                        <button class="btn btn-xs btn-default" data-bind="click: refresh, enable: !loading()">
-                            <i class="fa" data-bind="css: loading() ? 'fa-refresh fa-spin' : 'fa-refresh'"></i>
-                            {{ lang._('Refresh') }}
-                        </button>
-                        <button class="btn btn-xs btn-default" data-bind="click: clear, enable: !clearing()">
-                            <i class="fa fa-trash"></i> {{ lang._('Clear Log') }}
-                        </button>
-                    </div>
+                    <button class="btn btn-xs btn-default pull-right" data-bind="click: refresh, enable: !loading()">
+                        <i class="fa" data-bind="css: loading() ? 'fa-refresh fa-spin' : 'fa-refresh'"></i>
+                        {{ lang._('Refresh') }}
+                    </button>
+                    <button class="btn btn-xs btn-default pull-right" style="margin-right:5px;" data-bind="click: clear, enable: !clearing()">
+                        <i class="fa fa-trash"></i> {{ lang._('Clear Log') }}
+                    </button>
                     <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
@@ -86,5 +89,7 @@
 
 {% block javascript %}
     {{ parent() }}
+    <script src="{{ url.getBaseUri() }}js/axisnetworkmonitor/axis-vendor.js"></script>
+    <script src="{{ url.getBaseUri() }}js/axisnetworkmonitor/axis-app.js"></script>
     <script src="{{ url.getBaseUri() }}js/axisnetworkmonitor/logs.js"></script>
 {% endblock %}

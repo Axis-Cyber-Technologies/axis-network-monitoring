@@ -20,6 +20,8 @@
 %%WWWDIR%%/app/library/OPNsense/AxisNetworkMonitor/Logger.php
 %%WWWDIR%%/www/js/axisnetworkmonitor/setup.js
 %%WWWDIR%%/www/js/axisnetworkmonitor/logs.js
+%%WWWDIR%%/www/js/axisnetworkmonitor/axis-vendor.js
+%%WWWDIR%%/www/js/axisnetworkmonitor/axis-app.js
 %%WWWDIR%%/service/conf/actions.d/actions_axisnetworkmonitor.conf
 %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/check_dependencies.php
 %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/hardware_profile.php

@@ -41,13 +41,13 @@ class GeneralController extends IndexController
         $configured = $model->general->configured->__toString() === '1';
 
         $this->view->title = gettext('Axis Network Monitor');
-        $this->view->configured = $configured;
         $this->view->friendlyName = (string)$model->general->friendlyName;
 
         if ($configured) {
-            $this->view->greeting = gettext('Your plugin skeleton is ready. Continue building the dashboard here.');
+            $this->view->wizardRequired = 'false';
             $this->view->pick('OPNsense/AxisNetworkMonitor/general/index');
         } else {
+            $this->view->wizardRequired = 'true';
             $this->view->pick('OPNsense/AxisNetworkMonitor/general/setup');
         }
     }

@@ -1,0 +1,1 @@
+/* Placeholder vendor bundle. Real Aurelia build artifacts will replace this file. */
