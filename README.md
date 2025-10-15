@@ -102,7 +102,7 @@ plugin state without reinstalling.
    Activity Log and future widgets.
 
 For a click-by-click guide aimed at non-technical administrators, see
-`docs/USER_INSTALLATION.md`.
+`docs/USER_INSTALLATION.md` and `docs/USER_SETUP_GUIDE.md`.
 
 ## Installing & Updating on Real Firewalls
 
