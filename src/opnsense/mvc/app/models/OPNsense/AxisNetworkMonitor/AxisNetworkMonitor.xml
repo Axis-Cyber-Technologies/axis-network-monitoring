@@ -79,5 +79,35 @@
                 <default></default>
             </notes>
         </ingestion>
+        <telemetry>
+            <fluentHost type="TextField">
+                <default>127.0.0.1</default>
+                <Required>N</Required>
+            </fluentHost>
+            <fluentPort type="IntegerField">
+                <default>2021</default>
+                <Required>N</Required>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>65535</MaximumValue>
+            </fluentPort>
+            <fluentUseTLS type="BooleanField">
+                <default>0</default>
+            </fluentUseTLS>
+        </telemetry>
+        <network>
+            <interfaces type="ArrayField">
+                <name type="TextField">
+                    <Required>N</Required>
+                </name>
+            </interfaces>
+            <notes type="TextAreaField">
+                <default></default>
+            </notes>
+        </network>
+        <advanced>
+            <autoUpdate type="BooleanField">
+                <default>1</default>
+            </autoUpdate>
+        </advanced>
     </items>
 </model>

@@ -225,3 +225,19 @@ class SettingsController extends ApiMutableModelControllerBase
         }
         return ['success' => false, 'message' => gettext('Unable to parse Fluent Bit test result.'), 'raw' => $json];
     }
+
+    public function interfacesAction(): array
+    {
+        $result = [];
+        $config = Config::getInstance()->object();
+        if (isset($config->interfaces)) {
+            foreach ($config->interfaces as $ifaceName => $iface) {
+                $descr = (string)($iface->descr ?? $ifaceName);
+                $result[] = [
+                    'name' => (string)$ifaceName,
+                    'description' => $descr,
+                ];
+            }
+        }
+        return $result;
+    }

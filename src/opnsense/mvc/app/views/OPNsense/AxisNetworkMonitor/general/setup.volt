@@ -43,7 +43,9 @@
                 <div class="wizard-step" data-bind="css: { active: step() === 2 }">2. {{ lang._('General') }}</div>
                 <div class="wizard-step" data-bind="css: { active: step() === 3 }">3. {{ lang._('ClickHouse') }}</div>
                 <div class="wizard-step" data-bind="css: { active: step() === 4 }">4. {{ lang._('Redis & Queues') }}</div>
-                <div class="wizard-step" data-bind="css: { active: step() === 5 }">5. {{ lang._('Summary') }}</div>
+                <div class="wizard-step" data-bind="css: { active: step() === 5 }">5. {{ lang._('Telemetry') }}</div>
+                <div class="wizard-step" data-bind="css: { active: step() === 6 }">6. {{ lang._('Network') }}</div>
+                <div class="wizard-step" data-bind="css: { active: step() === 7 }">7. {{ lang._('Summary') }}</div>
             </div>
 
             <div data-bind="visible: step() === 1">
@@ -186,6 +188,12 @@
                         <label><input type="checkbox" data-bind="checked: form.general.onboot" /> {{ lang._('Enable auto-start for managed services') }}</label>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>{{ lang._('Keep supporting services up to date?') }}</label>
+                    <div class="checkbox">
+                        <label><input type="checkbox" data-bind="checked: form.advanced.autoUpdate" /> {{ lang._('Enable automatic updates for managed packages') }}</label>
+                    </div>
+                </div>
             </div>
 
             <div data-bind="visible: step() === 3">
@@ -270,6 +278,57 @@
             </div>
 
             <div data-bind="visible: step() === 5">
+                <h3>{{ lang._('Telemetry (Fluent Bit)') }}</h3>
+                <div class="alert" data-bind="visible: fluentTestStatus.message, css: fluentTestStatus.success() === true ? 'alert-success' : (fluentTestStatus.success() === false ? 'alert-danger' : 'alert-info')">
+                    <span data-bind="text: fluentTestStatus.message"></span>
+                </div>
+                <div class="form-group">
+                    <label for="fluentHost">{{ lang._('Host') }}</label>
+                    <input id="fluentHost" type="text" class="form-control" data-bind="value: form.telemetry.host" />
+                </div>
+                <div class="form-group">
+                    <label for="fluentPort">{{ lang._('Metrics Port') }}</label>
+                    <input id="fluentPort" type="number" class="form-control" data-bind="value: form.telemetry.port" />
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label><input type="checkbox" data-bind="checked: form.telemetry.useTLS" /> {{ lang._('Use TLS for Fluent Bit metrics endpoint') }}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" data-bind="click: testFluentbit, enable: !fluentTestStatus.running()">
+                        <i class="fa" data-bind="css: fluentTestStatus.running() ? 'fa-refresh fa-spin' : 'fa-plug'"></i>
+                        {{ lang._('Test Connection') }}
+                    </button>
+                </div>
+            </div>
+
+            <div data-bind="visible: step() === 6">
+                <h3>{{ lang._('Network Interfaces') }}</h3>
+                <p class="text-muted">{{ lang._('Select which interfaces should be monitored and optionally record notes about the deployment topology.') }}</p>
+                <div class="form-group" data-bind="visible: availableInterfaces().length > 0">
+                    <div data-bind="foreach: availableInterfaces">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" data-bind="checkedValue: name, checked: $parent.form.network.interfaces" />
+                                <span data-bind="text: description"></span>
+                                <span class="text-muted" data-bind="visible: description && description !== name"> (</span>
+                                <span class="text-muted" data-bind="visible: description && description !== name, text: name"></span>
+                                <span class="text-muted" data-bind="visible: description && description !== name">)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-warning" data-bind="visible: availableInterfaces().length === 0">
+                    {{ lang._('No interfaces were detected. They will appear here once configured under Interfaces → Assignments.') }}
+                </div>
+                <div class="form-group">
+                    <label for="networkNotes">{{ lang._('Notes') }}</label>
+                    <textarea id="networkNotes" class="form-control" rows="3" data-bind="value: form.network.notes"></textarea>
+                </div>
+            </div>
+
+            <div data-bind="visible: step() === 7">
                 <h3>{{ lang._('Review & Apply') }}</h3>
                 <p>{{ lang._('Confirm the collected values before applying configuration.') }}</p>
                 <table class="table table-striped">
@@ -277,6 +336,18 @@
                         <tr>
                             <th>{{ lang._('Display name') }}</th>
                             <td data-bind="text: form.general.friendlyName"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ lang._('Enable services') }}</th>
+                            <td data-bind="text: enabledSummary"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ lang._('Start services at boot') }}</th>
+                            <td data-bind="text: onbootSummary"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ lang._('Auto update managed services') }}</th>
+                            <td data-bind="text: autoUpdateSummary"></td>
                         </tr>
                         <tr>
                             <th>{{ lang._('ClickHouse Endpoint') }}</th>
@@ -287,12 +358,12 @@
                             <td data-bind="text: redisSummary"></td>
                         </tr>
                         <tr>
-                            <th>{{ lang._('Enable services') }}</th>
-                            <td data-bind="text: enabledSummary"></td>
+                            <th>{{ lang._('Fluent Bit Metrics') }}</th>
+                            <td data-bind="text: telemetrySummary"></td>
                         </tr>
                         <tr>
-                            <th>{{ lang._('Start services at boot') }}</th>
-                            <td data-bind="text: onbootSummary"></td>
+                            <th>{{ lang._('Monitored Interfaces') }}</th>
+                            <td data-bind="text: networkSummary"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -308,8 +379,8 @@
 
             <div class="wizard-actions">
                 <button class="btn btn-default" data-bind="click: prev, enable: step() > 1">{{ lang._('Back') }}</button>
-                <button class="btn btn-primary" data-bind="visible: step() < 5, click: next, enable: canProceed">{{ lang._('Next') }}</button>
-                <button class="btn btn-success" data-bind="visible: step() === 5, click: save, css: { disabled: saving() }, enable: !saving()">{{ lang._('Finish Setup') }}</button>
+                <button class="btn btn-primary" data-bind="visible: step() < 7, click: next, enable: canProceed">{{ lang._('Next') }}</button>
+                <button class="btn btn-success" data-bind="visible: step() === 7, click: save, css: { disabled: saving() }, enable: !saving()">{{ lang._('Finish Setup') }}</button>
             </div>
 
             <div class="alert alert-danger" data-bind="visible: errorMessage">

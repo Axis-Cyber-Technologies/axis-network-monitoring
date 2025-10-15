@@ -39,8 +39,22 @@
             ingestion: {
                 fluentBitEnabled: ko.observable(true),
                 notes: ko.observable('')
+            },
+            telemetry: {
+                host: ko.observable('127.0.0.1'),
+                port: ko.observable(2021),
+                useTLS: ko.observable(false)
+            },
+            network: {
+                interfaces: ko.observableArray([]),
+                notes: ko.observable('')
+            },
+            advanced: {
+                autoUpdate: ko.observable(true)
             }
         };
+
+        self.availableInterfaces = ko.observableArray([]);
 
         function DependencyRow(parent, data) {
             var row = this;
@@ -159,11 +173,27 @@
             return scheme + credentials + self.form.redis.host() + ':' + self.form.redis.port();
         });
 
+        self.telemetrySummary = ko.computed(function() {
+            var scheme = self.form.telemetry.useTLS() ? 'https://' : 'http://';
+            return scheme + self.form.telemetry.host() + ':' + self.form.telemetry.port();
+        });
+
+        self.networkSummary = ko.computed(function() {
+            var items = self.form.network.interfaces();
+            if (!items || items.length === 0) {
+                return gettext('None selected');
+            }
+            return items.join(', ');
+        });
+
         self.enabledSummary = ko.computed(function() {
             return self.form.general.enabled() ? gettext('Yes') : gettext('No');
         });
         self.onbootSummary = ko.computed(function() {
             return self.form.general.onboot() ? gettext('Yes') : gettext('No');
+        });
+        self.autoUpdateSummary = ko.computed(function() {
+            return self.form.advanced.autoUpdate() ? gettext('Yes') : gettext('No');
         });
 
         self.canProceed = ko.computed(function() {
@@ -197,6 +227,10 @@
                         self.form.clickhouse.username().trim().length > 0;
                 case 4:
                     return self.form.redis.host().trim().length > 0 && !!self.form.redis.port();
+                case 5:
+                    return self.form.telemetry.host().trim().length > 0 && !!self.form.telemetry.port();
+                case 6:
+                    return self.form.network.interfaces().length > 0;
                 default:
                     return true;
             }
@@ -229,15 +263,35 @@
                     ingestion: {
                         fluentBitEnabled: self.form.ingestion.fluentBitEnabled() ? '1' : '0',
                         notes: self.form.ingestion.notes()
+                    },
+                    telemetry: {
+                        fluentHost: self.form.telemetry.host(),
+                        fluentPort: String(self.form.telemetry.port()),
+                        fluentUseTLS: self.form.telemetry.useTLS() ? '1' : '0'
+                    },
+                    network: {
+                        interfaces: self.form.network.interfaces().map(function(name) {
+                            return { name: name };
+                        }),
+                        notes: self.form.network.notes()
+                    },
+                    advanced: {
+                        autoUpdate: self.form.advanced.autoUpdate() ? '1' : '0'
                     }
                 }
             };
         };
 
         self.save = function() {
-            if (!self.validateStep(4)) {
-                return;
+            var requiredSteps = [1, 2, 3, 4, 5, 6];
+            for (var i = 0; i < requiredSteps.length; i++) {
+                if (!self.validateStep(requiredSteps[i])) {
+                    self.step(requiredSteps[i]);
+                    self.errorMessage(gettext('Please resolve the highlighted issues before finishing setup.'));
+                    return;
+                }
             }
+
             self.saving(true);
             self.errorMessage('');
             self.successMessage('');
@@ -318,9 +372,50 @@
                         self.form.ingestion.fluentBitEnabled(mdl.ingestion.fluentBitEnabled !== '0');
                         self.form.ingestion.notes(mdl.ingestion.notes || '');
                     }
+                    if (mdl.telemetry) {
+                        self.form.telemetry.host(mdl.telemetry.fluentHost || '127.0.0.1');
+                        self.form.telemetry.port(parseInt(mdl.telemetry.fluentPort || 2021, 10));
+                        self.form.telemetry.useTLS(mdl.telemetry.fluentUseTLS === '1');
+                    }
+                    if (mdl.network) {
+                        var selected = [];
+                        if (mdl.network.interfaces) {
+                            Object.keys(mdl.network.interfaces).forEach(function(key) {
+                                var iface = mdl.network.interfaces[key];
+                                if (iface && iface.name) {
+                                    selected.push(iface.name);
+                                }
+                            });
+                        }
+                        self.form.network.interfaces(selected);
+                        self.form.network.notes(mdl.network.notes || '');
+                    }
+                    if (mdl.advanced) {
+                        self.form.advanced.autoUpdate(mdl.advanced.autoUpdate !== '0');
+                    }
+                    self.loadInterfaces();
+                } else {
+                    self.loadInterfaces();
                 }
             });
             self.refreshPrerequisites();
+        };
+
+        self.loadInterfaces = function() {
+            $.getJSON('/api/axisnetworkmonitor/settings/interfaces', function(list) {
+                var entries = Array.isArray(list) ? list : [];
+                var selected = self.form.network.interfaces();
+                selected.forEach(function(name) {
+                    var found = entries.some(function(item) { return item.name === name; });
+                    if (!found) {
+                        entries.push({ name: name, description: name + ' (custom)' });
+                    }
+                });
+                self.availableInterfaces(entries);
+                if (self.form.network.interfaces().length === 0 && entries.length > 0) {
+                    self.form.network.interfaces([entries[0].name]);
+                }
+            });
         };
 
         self.refreshPrerequisites = function() {
@@ -346,6 +441,9 @@
                     }
                     if (row.id === 'clickhouse' && row.suggested) {
                         self.applySuggestion('clickhouse', row.suggested);
+                    }
+                    if (row.id === 'fluent-bit' && row.suggested) {
+                        self.applySuggestion('fluent-bit', row.suggested);
                     }
                 });
                 self.prereqOk(ok);
@@ -414,6 +512,16 @@
                 if (typeof suggestion.use_tls !== 'undefined') {
                     self.form.clickhouse.useTLS(!!suggestion.use_tls);
                 }
+            } else if (id === 'fluent-bit') {
+                if (!self.form.telemetry.host()) {
+                    self.form.telemetry.host(suggestion.host || '127.0.0.1');
+                }
+                if (!self.form.telemetry.port() || self.form.telemetry.port() === 0) {
+                    self.form.telemetry.port(suggestion.port || 2021);
+                }
+                if (typeof suggestion.use_tls !== 'undefined') {
+                    self.form.telemetry.useTLS(!!suggestion.use_tls);
+                }
             }
         };
 
@@ -424,6 +532,12 @@
         };
 
         self.redisTestStatus = {
+            running: ko.observable(false),
+            message: ko.observable(''),
+            success: ko.observable(null)
+        };
+
+        self.fluentTestStatus = {
             running: ko.observable(false),
             message: ko.observable(''),
             success: ko.observable(null)
@@ -484,6 +598,38 @@
                 self.redisTestStatus.message(xhr.responseText || gettext('Connection failed.'));
             }).always(function() {
                 self.redisTestStatus.running(false);
+            });
+        };
+
+        self.testFluentbit = function() {
+            self.fluentTestStatus.running(true);
+            self.fluentTestStatus.message('');
+            self.fluentTestStatus.success(null);
+            $.ajax({
+                url: '/api/axisnetworkmonitor/settings/testFluentbit',
+                type: 'post',
+                data: {
+                    host: self.form.telemetry.host(),
+                    port: self.form.telemetry.port(),
+                    tls: self.form.telemetry.useTLS() ? 1 : 0
+                }
+            }).done(function(resp) {
+                if (resp && resp.success) {
+                    self.fluentTestStatus.success(true);
+                    self.fluentTestStatus.message(gettext('Metrics endpoint reachable.'));
+                } else {
+                    self.fluentTestStatus.success(false);
+                    var msg = (resp && resp.error) || gettext('Connection failed.');
+                    if (resp && resp.http_code) {
+                        msg += ' (HTTP ' + resp.http_code + ')';
+                    }
+                    self.fluentTestStatus.message(msg);
+                }
+            }).fail(function(xhr) {
+                self.fluentTestStatus.success(false);
+                self.fluentTestStatus.message(xhr.responseText || gettext('Connection failed.'));
+            }).always(function() {
+                self.fluentTestStatus.running(false);
             });
         };
     }

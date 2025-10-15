@@ -11,7 +11,7 @@ Monitor plugin after it has been installed.
      to revisit the wizard at any time.
 
 ## 2. Complete the Setup Wizard
-The wizard has five steps; all mandatory checks must pass before you can finish.
+The wizard has seven steps; all mandatory checks must pass before you can finish.
 
 ### Step 1 – Preflight Checks
 - Click **Re-check Requirements** to verify:
@@ -30,6 +30,8 @@ The wizard has five steps; all mandatory checks must pass before you can finish.
   setup; uncheck if you want to set it up but keep services off for now.
 - **Start services automatically on boot**: controls whether Redis and Fluent
   Bit are enabled at startup.
+- **Keep services updated**: optionally enable automatic package updates for
+  the managed dependencies.
 
 ### Step 3 – ClickHouse Connection
 - Provide the hostname/IP, port, database, username, and password for your
@@ -45,7 +47,16 @@ The wizard has five steps; all mandatory checks must pass before you can finish.
   add notes to track external setup tasks.
 - Click **Test Connection** to verify Redis responds (expects `PONG`).
 
-### Step 5 – Summary
+### Step 5 – Telemetry (Fluent Bit)
+- Enter the Fluent Bit metrics host/port (defaults to the local daemon).
+- Enable TLS if the metrics endpoint is secured.
+- Click **Test Connection** to ensure the metrics URL is reachable.
+
+### Step 6 – Network Interfaces
+- Select the interfaces that should be monitored (LAN, OPT interfaces, VLANs).
+- Add optional notes describing the deployment topology or spans/taps in use.
+
+### Step 7 – Summary
 - Review all values. If something looks wrong, click **Back** to adjust.
 - Click **Finish Setup**. The plugin saves settings and enables services if you
   left the checkbox on in Step 2.
