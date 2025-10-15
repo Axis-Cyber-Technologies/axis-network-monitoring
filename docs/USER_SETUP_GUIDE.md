@@ -82,13 +82,19 @@ After completing the wizard you land on the Axis Network Monitor dashboard.
 ### Additional Setup Pages
 - **Configuration** – quick link back to the wizard and, in future releases,
   inline toggles for common options.
-- **Reporting & Data** – will expose retention policies and export options.
-- **Telemetry** – central place to check Fluent Bit status and metrics.
+- **Dashboard / Status** – overview screens for runtime health (under
+  construction).
+- **Reports** – will expose retention policies and analytics dashboards backed
+  by ClickHouse.
+- **App Controls / Web Controls** – forthcoming editors for application and web
+  category policies.
 - **Security & IDS** – planned home for policy orchestration and intrusion
   detection tuning.
+- **Configuration** – quick link back to the wizard and upcoming global
+  settings.
 - **Advanced** – will surface auto-update controls, scheduled jobs, and other
-  expert-level settings. These sections currently provide guidance and shortcuts
-  while deeper functionality is under construction.
+  expert-level settings. These sections currently provide guidance and
+  shortcuts while deeper functionality is under construction.
 
 ## 4. Enabling / Disabling the Plugin
 - Use the **Enable services** toggle in Step 2 of the wizard or click the gear

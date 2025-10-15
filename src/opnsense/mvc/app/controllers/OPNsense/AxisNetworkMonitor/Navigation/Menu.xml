@@ -1,13 +1,15 @@
 <navigation>
     <menu>
         <axisnetworkmonitor order="65" cssClass="fa fa-binoculars">
-            <SetupWizard order="1" url="/ui/axisnetworkmonitor/general/" cssClass="fa fa-magic fa-fw" VisibleName="Setup Wizard"/>
-            <Dashboard order="2" url="/ui/axisnetworkmonitor/general/" cssClass="fa fa-dashboard fa-fw"/>
-            <Configuration order="3" url="/ui/axisnetworkmonitor/configuration/" cssClass="fa fa-cog fa-fw"/>
-            <Reporting order="4" url="/ui/axisnetworkmonitor/reporting/" cssClass="fa fa-area-chart fa-fw" VisibleName="Reporting &amp; Data"/>
-            <Telemetry order="5" url="/ui/axisnetworkmonitor/telemetry/" cssClass="fa fa-television fa-fw"/>
-            <Security order="6" url="/ui/axisnetworkmonitor/security/" cssClass="fa fa-shield fa-fw" VisibleName="Security &amp; IDS"/>
-            <Advanced order="7" url="/ui/axisnetworkmonitor/advanced/" cssClass="fa fa-wrench fa-fw"/>
+            <Dashboard order="1" url="/ui/axisnetworkmonitor/dashboard/" cssClass="fa fa-dashboard fa-fw"/>
+            <Status order="2" url="/ui/axisnetworkmonitor/status/" cssClass="fa fa-heartbeat fa-fw"/>
+            <Reports order="3" url="/ui/axisnetworkmonitor/reports/" cssClass="fa fa-area-chart fa-fw"/>
+            <Security order="4" url="/ui/axisnetworkmonitor/security/" cssClass="fa fa-shield fa-fw"/>
+            <AppControls order="5" url="/ui/axisnetworkmonitor/apps/" cssClass="fa fa-paper-plane-o fa-fw" VisibleName="App Controls"/>
+            <WebControls order="6" url="/ui/axisnetworkmonitor/web/" cssClass="fa fa-list-alt fa-fw" VisibleName="Web Controls"/>
+            <Configuration order="7" url="/ui/axisnetworkmonitor/configuration/" cssClass="fa fa-cog fa-fw"/>
+            <Advanced order="8" url="/ui/axisnetworkmonitor/advanced/" cssClass="fa fa-wrench fa-fw"/>
+            <SetupWizard order="9" url="/ui/axisnetworkmonitor/general/" cssClass="fa fa-magic fa-fw" VisibleName="Setup Wizard"/>
         </axisnetworkmonitor>
     </menu>
 </navigation>

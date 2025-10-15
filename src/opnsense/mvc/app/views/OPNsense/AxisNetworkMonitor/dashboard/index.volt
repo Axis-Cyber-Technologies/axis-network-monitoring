@@ -1,6 +1,6 @@
 {% extends "layouts/base.volt" %}
 
-{% block title %}{{ lang._('Axis Network Monitor') }}{% endblock %}
+{% block title %}{{ lang._('Axis Network Monitor Dashboard') }}{% endblock %}
 
 {% block content %}
     <div class="content-box">

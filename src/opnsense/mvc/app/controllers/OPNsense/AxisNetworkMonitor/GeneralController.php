@@ -40,14 +40,10 @@ class GeneralController extends IndexController
         $model = new AxisNetworkMonitor();
         $configured = $model->general->configured->__toString() === '1';
 
-        $this->view->title = gettext('Axis Network Monitor');
-        $this->view->friendlyName = (string)$model->general->friendlyName;
-
         if ($configured) {
-            $this->view->wizardRequired = 'false';
-            $this->view->pick('OPNsense/AxisNetworkMonitor/general/index');
+            $this->response->setRedirect('/ui/axisnetworkmonitor/dashboard/');
         } else {
-            $this->view->wizardRequired = 'true';
+            $this->view->title = gettext('Axis Network Monitor');
             $this->view->pick('OPNsense/AxisNetworkMonitor/general/setup');
         }
     }

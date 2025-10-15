@@ -16,9 +16,10 @@ WAN monitoring and policy orchestration on OPNsense.
   dashboard.
 - **Dev sandbox assets** – Docker Compose stack (ClickHouse, Redis, Fluent Bit,
   FastAPI worker) for rapid experimentation.
-- **Post-install setup console** – dedicated pages for Configuration, Reporting,
-  Telemetry, Security/IDS, and Advanced options (accessible under Reporting →
-  Axis Network Monitor) in addition to the guided wizard.
+- **Post-install setup console** – top-level navigation mirrors Zenarmor with
+  Dashboard, Status, Reports, Security, App Controls, Web Controls,
+  Configuration, and Advanced modules (currently shipping as placeholders while
+  the Aurelia SPA is implemented).
 
 ## Repository Layout
 
