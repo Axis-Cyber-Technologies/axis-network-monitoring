@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.9
+    container_name: axis-clickhouse
+    environment:
+      CLICKHOUSE_DB: axis_monitor
+      CLICKHOUSE_USER: axis_admin
+      CLICKHOUSE_PASSWORD: axis_admin_secret
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./docker/clickhouse/initdb.d:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "8123:8123"   # HTTP
+      - "9000:9000"   # Native TCP
+
+  redis:
+    image: redis:7-alpine
+    container_name: axis-redis
+    command: ["redis-server", "--requirepass", "axis_secret"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  api:
+    build: ./services/api
+    container_name: axis-api
+    environment:
+      CH_HOST: clickhouse
+      CH_PORT: "8123"
+      CH_USER: axis_api
+      CH_PASSWORD: axis_secret
+      CH_SECURE: "false"
+      REDIS_URL: redis://:axis_secret@redis:6379/0
+    depends_on:
+      - clickhouse
+      - redis
+    ports:
+      - "8080:8080"
+
+  fluent-bit:
+    build: ./docker/fluent-bit
+    container_name: axis-fluent-bit
+    environment:
+      CLICKHOUSE_BASIC_AUTH: YXhpc19hcGk6YXhpc19zZWNyZXQ=
+    volumes:
+      - ./demo/logs/suricata-eve.json:/var/log/suricata/eve.json:ro
+      - ./demo/logs/ntopng-flows.json:/var/log/ntopng/flows.json:ro
+    depends_on:
+      - clickhouse
+
+  worker:
+    build: ./services/workers
+    container_name: axis-approval-worker
+    environment:
+      REDIS_URL: redis://:axis_secret@redis:6379/0
+      REQUEST_STREAM: approvals:requested
+      DECISION_STREAM: approvals:decided
+      CONSUMER_GROUP: validator
+      CONSUMER_NAME: validator-1
+      CH_HOST: clickhouse
+      CH_PORT: "8123"
+      CH_USER: axis_api
+      CH_PASSWORD: axis_secret
+      CH_SECURE: "false"
+    depends_on:
+      - redis
+      - clickhouse
+
+volumes:
+  clickhouse_data:
+  redis_data:

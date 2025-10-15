@@ -1,2 +1,5 @@
-Axis Network Monitor plugin skeleton for OPNsense. Provides a
-placeholder user interface to verify that the plugin wiring works.
+Axis Network Monitor plugin by Axis Cyber Technologies. Provides the
+configuration wizard, dependency management, and logging framework used to
+bootstrap LAN/WAN monitoring and policy orchestration features.
+
+Homepage: https://www.axiscyber.com/

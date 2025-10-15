@@ -1,0 +1,83 @@
+<model>
+    <mount>axisnetworkmonitor</mount>
+    <version>1.0.0</version>
+    <description>Axis Network Monitor configuration model</description>
+    <items>
+        <general>
+            <enabled type="BooleanField">
+                <default>0</default>
+                <Required>Y</Required>
+            </enabled>
+            <onboot type="BooleanField">
+                <default>0</default>
+                <Required>Y</Required>
+            </onboot>
+            <friendlyName type="TextField">
+                <default>Axis Network Monitor</default>
+                <Required>Y</Required>
+                <ValidationMessage>Please provide a friendly name.</ValidationMessage>
+            </friendlyName>
+            <configured type="BooleanField">
+                <default>0</default>
+            </configured>
+        </general>
+        <clickhouse>
+            <host type="TextField">
+                <default>localhost</default>
+                <Required>Y</Required>
+                <ValidationMessage>Set the ClickHouse host or IP.</ValidationMessage>
+            </host>
+            <port type="IntegerField">
+                <default>8123</default>
+                <Required>Y</Required>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>65535</MaximumValue>
+            </port>
+            <database type="TextField">
+                <default>axis_monitor</default>
+                <Required>Y</Required>
+            </database>
+            <username type="TextField">
+                <default>axis_api</default>
+                <Required>Y</Required>
+            </username>
+            <password type="PasswordField">
+                <default></default>
+                <Required>N</Required>
+            </password>
+            <useTLS type="BooleanField">
+                <default>0</default>
+            </useTLS>
+        </clickhouse>
+        <redis>
+            <host type="TextField">
+                <default>localhost</default>
+                <Required>Y</Required>
+            </host>
+            <port type="IntegerField">
+                <default>6379</default>
+                <Required>Y</Required>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>65535</MaximumValue>
+            </port>
+            <username type="TextField">
+                <default></default>
+            </username>
+            <password type="PasswordField">
+                <default></default>
+                <Required>N</Required>
+            </password>
+            <useTLS type="BooleanField">
+                <default>0</default>
+            </useTLS>
+        </redis>
+        <ingestion>
+            <fluentBitEnabled type="BooleanField">
+                <default>1</default>
+            </fluentBitEnabled>
+            <notes type="TextAreaField">
+                <default></default>
+            </notes>
+        </ingestion>
+    </items>
+</model>

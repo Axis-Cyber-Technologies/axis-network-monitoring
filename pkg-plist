@@ -1,8 +1,34 @@
 %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/GeneralController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Api/SettingsController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Api/LogsController.php
 %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Navigation/Menu.xml
 %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/acl.xml
+%%WWWDIR%%/app/models/OPNsense/AxisNetworkMonitor/AxisNetworkMonitor.php
+%%WWWDIR%%/app/models/OPNsense/AxisNetworkMonitor/AxisNetworkMonitor.xml
 %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general/index.volt
+%%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general/setup.volt
+%%WWWDIR%%/app/library/OPNsense/AxisNetworkMonitor/Logger.php
+%%WWWDIR%%/www/js/axisnetworkmonitor/setup.js
+%%WWWDIR%%/www/js/axisnetworkmonitor/logs.js
+%%WWWDIR%%/service/conf/actions.d/actions_axisnetworkmonitor.conf
+%%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/check_dependencies.php
+%%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/hardware_profile.php
+%%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/manage_dependency.php
+%%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/clear_log.sh
 @dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general
 @dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor
+@dir %%WWWDIR%%/app/models/OPNsense/AxisNetworkMonitor
+@dir %%WWWDIR%%/app/models/OPNsense
 @dir %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Navigation
+@dir %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Api
 @dir %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor
+@dir %%WWWDIR%%/app/library/OPNsense/AxisNetworkMonitor
+@dir %%WWWDIR%%/app/library/OPNsense
+@dir %%WWWDIR%%/app/library
+@dir %%WWWDIR%%/www/js/axisnetworkmonitor
+@dir %%WWWDIR%%/service/conf/actions.d
+@dir %%WWWDIR%%/service/conf
+@dir %%WWWDIR%%/service
+@dir %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor
+@dir %%WWWDIR%%/scripts/OPNsense
+@dir %%WWWDIR%%/scripts

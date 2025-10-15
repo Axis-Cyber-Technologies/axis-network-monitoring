@@ -72,3 +72,50 @@ Follow `docs/DEPLOYMENT.md` for a full walkthrough on:
 - Generating and signing the package
 - Hosting a custom package repository
 - Registering the repository on each firewall to receive updates automatically
+
+## Development Sandbox
+
+Use `docker-compose.yml` to spin up a local ClickHouse + Redis + Fluent Bit +
+FastAPI stack that exercises the analytics pipeline. See
+`docs/DEVELOPMENT_STACK.md` for instructions.
+
+## Approval Workflow Prototype
+
+Redis-backed queue design and worker scaffolding live under `docs/redis/` and
+`services/workers/`. Start the compose stack and consult `docs/redis/WORKERS.md`
+to experiment with automated approvals and policy-change auditing.
+
+## Setup Wizard
+
+Navigate to **Reporting → Axis Network Monitor** to launch the new KnockoutJS
+setup wizard. It collects ClickHouse, Redis, and ingestion parameters and
+persists them via the plugin’s settings API before unlocking the main landing
+page. The first step verifies prerequisites (packages, services, hardware); if
+anything is missing consult `docs/DEPENDENCIES.md` for installation guidance.
+
+## Activity Logs
+
+Operational actions (wizard, dependency management, config changes) are written
+to `/var/log/axisnetworkmonitor.log`. Use the Activity Log panel on the landing
+page or refer to `docs/LOGGING.md` for API access and retention guidance.
+
+## Enabling / Disabling
+
+The *Enabled* toggle in the setup wizard automatically manages local
+dependencies:
+
+- Turning it **on** installs (if needed), enables, and starts the local Redis
+  and Fluent Bit services, and marks them to start on boot.
+- Turning it **off** stops those services, disables their boot flags, and
+  updates the plugin config accordingly.
+
+You can also trigger the same behaviour via `configctl
+axisnetworkmonitor enable-toggle enable|disable`.
+
+## Version Compatibility
+
+Refer to `docs/COMPATIBILITY.md` for the latest OPNsense core/plugins release
+tags this repository has been tested against (currently 25.7.5).
+
+For questions or support contact Axis Cyber Technologies at
+`contact@axiscyber.com` or `info@axiscyber.com`.

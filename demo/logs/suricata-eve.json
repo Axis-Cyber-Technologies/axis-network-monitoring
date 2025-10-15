@@ -1,0 +1,1 @@
+{"timestamp":"2024-10-15T19:45:30.123456","event_type":"alert","src_ip":"10.0.0.10","src_port":44321,"dest_ip":"198.51.100.15","dest_port":443,"proto":"TCP","alert":{"action":"block","signature_id":100001,"signature":"Test TLS Block","category":"Attempted Information Leak"},"flow":{"pkts_toserver":5,"bytes_toserver":1200,"pkts_toclient":2,"bytes_toclient":500}}

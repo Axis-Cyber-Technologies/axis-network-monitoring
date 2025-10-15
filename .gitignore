@@ -1,0 +1,11 @@
+# Local development artifacts
+.venv/
+__pycache__/
+*.py[cod]
+.env
+
+# Tooling outputs
+*.log
+
+# External references
+external/

@@ -64,7 +64,7 @@ Upload the entire `work/pkg/` directory contents to HTTPS storage you control.
 The directory layout must stay intact:
 
 ```
-https://updates.axiscybertechnologies.com/opnsense/
+https://updates.axiscyber.com/opnsense/
   ├── meta
   ├── packagesite.pkg
   ├── packagesite.sig
@@ -80,7 +80,7 @@ On every firewall, create `/usr/local/etc/pkg/repos/axis.conf`:
 
 ```ini
 Axis: {
-  url: "https://updates.axiscybertechnologies.com/opnsense/",
+  url: "https://updates.axiscyber.com/opnsense/",
   signature_type: "FINGERPRINTS",
   fingerprints: "/usr/local/etc/pkg/fingerprints/axis",
   enabled: yes,
@@ -125,7 +125,7 @@ cd ~/tools/plugins/net/os-axis-network-monitor
 make clean package
 cd work/pkg
 pkg repo . ~/pkg-keys/axis-repo.key
-rsync -avz . user@updates.axiscybertechnologies.com:/var/www/opnsense/
+rsync -avz . user@updates.axiscyber.com:/var/www/opnsense/
 ```
 
 Adjust paths and upload method to match your infrastructure.

@@ -1,16 +1,6 @@
-PORTNAME=	os-axis-network-monitor
-PORTVERSION=	0.0.1
-CATEGORIES=	net
-MASTER_SITES=
-DISTFILES=
+PLUGIN_NAME=		axis-network-monitor
+PLUGIN_VERSION=		0.0.1
+PLUGIN_COMMENT=		Axis Network Monitor plugin (Axis Cyber Technologies)
+PLUGIN_MAINTAINER=	contact@axiscyber.com
 
-MAINTAINER=	security@axiscybertechnologies.com
-COMMENT=	Axis Cyber Technologies hello world plugin skeleton for OPNsense
-WWW=		https://axiscybertechnologies.com/
-
-LICENSE=	BSD2CLAUSE
-
-NO_ARCH=	yes
-NO_BUILD=	yes
-
-.include <bsd.port.mk>
+.include "../../Mk/plugins.mk"

@@ -33,12 +33,22 @@ use OPNsense\Base\IndexController;
 class GeneralController extends IndexController
 {
     /**
-     * Render the hello world view to verify plugin wiring.
+     * Render either the setup wizard or the default landing page.
      */
     public function indexAction(): void
     {
-        $this->view->pick('OPNsense/AxisNetworkMonitor/general/index');
+        $model = new AxisNetworkMonitor();
+        $configured = $model->general->configured->__toString() === '1';
+
         $this->view->title = gettext('Axis Network Monitor');
-        $this->view->greeting = gettext('Hello World! Your plugin skeleton is ready.');
+        $this->view->configured = $configured;
+        $this->view->friendlyName = (string)$model->general->friendlyName;
+
+        if ($configured) {
+            $this->view->greeting = gettext('Your plugin skeleton is ready. Continue building the dashboard here.');
+            $this->view->pick('OPNsense/AxisNetworkMonitor/general/index');
+        } else {
+            $this->view->pick('OPNsense/AxisNetworkMonitor/general/setup');
+        }
     }
 }

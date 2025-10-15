@@ -1,0 +1,1 @@
+{"time":1729011930,"cli.ip":"10.0.0.10","srv.ip":"203.0.113.20","cli.port":54832,"srv.port":80,"l7proto":"HTTP","bytes":2048,"cli2srv.bytes":1500,"srv2cli.bytes":548,"flow_status":"allowed"}
