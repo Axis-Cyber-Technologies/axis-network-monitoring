@@ -1,0 +1,8 @@
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/GeneralController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Navigation/Menu.xml
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/acl.xml
+%%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general/index.volt
+@dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general
+@dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor
+@dir %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Navigation
+@dir %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor

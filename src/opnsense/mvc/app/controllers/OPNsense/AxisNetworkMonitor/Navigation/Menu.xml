@@ -1,0 +1,14 @@
+<navigation>
+    <menu>
+        <reporting>
+            <axisnetworkmonitor>
+                <name>Axis Network Monitor</name>
+                <url>/ui/axisnetworkmonitor/general/</url>
+                <order>900</order>
+                <visible>1</visible>
+                <icon>fa-area-chart</icon>
+                <match>/ui/axisnetworkmonitor/</match>
+            </axisnetworkmonitor>
+        </reporting>
+    </menu>
+</navigation>

@@ -1,0 +1,65 @@
+# Axis Network Monitor (Hello World)
+
+This repository contains the skeleton for an OPNsense plugin named
+`os-axis-network-monitor`. At the moment it only exposes a **Hello World**
+page so that you can validate the packaging and installation workflow before
+building richer LAN/WAN monitoring capabilities.
+
+## Repository Layout
+
+```
+Makefile               Port definition consumed by the OPNsense build system
+pkg-descr              One-line package description
+pkg-plist              Files installed by the package
+src/
+  opnsense/
+    mvc/
+      app/
+        controllers/
+          OPNsense/
+            AxisNetworkMonitor/
+              GeneralController.php   UI controller rendering the page
+              Navigation/Menu.xml     Adds the entry to the OPNsense menu tree
+              acl.xml                 Declares the UI privilege name
+        views/
+          OPNsense/
+            AxisNetworkMonitor/
+              general/
+                index.volt            Volt template printing “Hello World”
+```
+
+## Local Build & Test
+
+1. Place the plugin directory under the official OPNsense plugins tree
+   (e.g. `/usr/tools/plugins/net/os-axis-network-monitor`) or clone this repo
+   next to the other plugins.
+2. From the root of the plugins tree run `make list` once to ensure the
+   toolchain is available, then build just this plugin:
+
+   ```sh
+   make generate
+   cd net/os-axis-network-monitor
+   make package
+   ```
+
+   The resulting package (`os-axis-network-monitor-*.pkg`) will be placed in
+   `work/pkg/`.
+
+## Installation on an OPNsense Appliance
+
+1. Copy the generated `.pkg` file to your OPNsense firewall (for example with
+   `scp`).
+2. Install it using the firmware CLI:
+
+   ```sh
+   opnsense-shell pkg install ./os-axis-network-monitor-0.0.1.pkg
+   ```
+
+3. Log in to the web UI, navigate to **Reporting → Axis Network Monitor**, and
+   you should see the “Hello World” page.
+
+To iterate quickly during development you may also copy the `src/opnsense`
+subtree straight into `/usr/local/www/opnsense/` on a test box and run
+`configctl template reload OPNsense.AxisNetworkMonitor` afterwards, but the
+packaging approach above mirrors how the plugin will be distributed once it is
+ready.
