@@ -1,58 +1,13 @@
 <navigation>
     <menu>
-        <reporting>
-            <axisnetworkmonitor>
-                <name>Axis Network Monitor</name>
-                <url>/ui/axisnetworkmonitor/general/</url>
-                <order>900</order>
-                <visible>1</visible>
-                <icon>fa-area-chart</icon>
-                <match>/ui/axisnetworkmonitor/</match>
-                <children>
-                    <setup>
-                        <name>Setup Wizard</name>
-                        <url>/ui/axisnetworkmonitor/general/</url>
-                        <order>10</order>
-                        <visible>1</visible>
-                        <match>/ui/axisnetworkmonitor/general/</match>
-                    </setup>
-                    <configuration>
-                        <name>Configuration</name>
-                        <url>/ui/axisnetworkmonitor/configuration/</url>
-                        <order>20</order>
-                        <visible>1</visible>
-                        <match>/ui/axisnetworkmonitor/configuration/</match>
-                    </configuration>
-                    <reporting>
-                        <name>Reporting &amp; Data</name>
-                        <url>/ui/axisnetworkmonitor/reporting/</url>
-                        <order>30</order>
-                        <visible>1</visible>
-                        <match>/ui/axisnetworkmonitor/reporting/</match>
-                    </reporting>
-                    <telemetry>
-                        <name>Telemetry</name>
-                        <url>/ui/axisnetworkmonitor/telemetry/</url>
-                        <order>40</order>
-                        <visible>1</visible>
-                        <match>/ui/axisnetworkmonitor/telemetry/</match>
-                    </telemetry>
-                    <intrusion>
-                        <name>Security &amp; IDS</name>
-                        <url>/ui/axisnetworkmonitor/security/</url>
-                        <order>50</order>
-                        <visible>1</visible>
-                        <match>/ui/axisnetworkmonitor/security/</match>
-                    </intrusion>
-                    <advanced>
-                        <name>Advanced</name>
-                        <url>/ui/axisnetworkmonitor/advanced/</url>
-                        <order>60</order>
-                        <visible>1</visible>
-                        <match>/ui/axisnetworkmonitor/advanced/</match>
-                    </advanced>
-                </children>
-            </axisnetworkmonitor>
-        </reporting>
+        <axisnetworkmonitor order="65" cssClass="fa fa-binoculars">
+            <SetupWizard order="1" url="/ui/axisnetworkmonitor/general/" cssClass="fa fa-magic fa-fw" VisibleName="Setup Wizard"/>
+            <Dashboard order="2" url="/ui/axisnetworkmonitor/general/" cssClass="fa fa-dashboard fa-fw"/>
+            <Configuration order="3" url="/ui/axisnetworkmonitor/configuration/" cssClass="fa fa-cog fa-fw"/>
+            <Reporting order="4" url="/ui/axisnetworkmonitor/reporting/" cssClass="fa fa-area-chart fa-fw" VisibleName="Reporting &amp; Data"/>
+            <Telemetry order="5" url="/ui/axisnetworkmonitor/telemetry/" cssClass="fa fa-television fa-fw"/>
+            <Security order="6" url="/ui/axisnetworkmonitor/security/" cssClass="fa fa-shield fa-fw" VisibleName="Security &amp; IDS"/>
+            <Advanced order="7" url="/ui/axisnetworkmonitor/advanced/" cssClass="fa fa-wrench fa-fw"/>
+        </axisnetworkmonitor>
     </menu>
 </navigation>
