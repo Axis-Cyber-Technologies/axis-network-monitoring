@@ -63,3 +63,12 @@ subtree straight into `/usr/local/www/opnsense/` on a test box and run
 `configctl template reload OPNsense.AxisNetworkMonitor` afterwards, but the
 packaging approach above mirrors how the plugin will be distributed once it is
 ready.
+
+## Installing & Updating on Real Firewalls
+
+Follow `docs/DEPLOYMENT.md` for a full walkthrough on:
+
+- Preparing an OPNsense-compatible build host
+- Generating and signing the package
+- Hosting a custom package repository
+- Registering the repository on each firewall to receive updates automatically
