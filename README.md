@@ -50,24 +50,24 @@ Clone this repository under `tools/plugins/net/os-axis-network-monitor`.
 
 ### Host Requirements
 
-| Host OS | Required tools |
-|---------|----------------|
-| **Ubuntu 22.04+** | `sudo apt install git build-essential python3 ca-certificates` |
-| **macOS (12+)** | `brew install git gnu-sed gnu-tar cmake` and ensure Rosetta/Intel shell for FreeBSD VM if on Apple Silicon |
+| Host OS | Purpose | Required tools |
+|---------|---------|----------------|
+| **Ubuntu 22.04+** | Clone/edit repo, sync with FreeBSD VM | `sudo apt install git build-essential python3 ca-certificates` |
+| **macOS (12+)** | Clone/edit repo, sync with FreeBSD VM | `brew install git gnu-sed gnu-tar cmake` (use Rosetta/Intel shell if on Apple Silicon) |
 
-> 💡 For macOS we recommend running the OPNsense `tools` tree inside a FreeBSD
-> VM (e.g. via UTM/VirtualBox). The host packages above cover repo management
-> and editing; building still occurs inside the FreeBSD VM.
+> ⚠️ **Packaging must run inside the OPNsense/FreeBSD tools environment.**  
+> Use a FreeBSD VM (or an actual OPNsense installation) to execute the `make`
+> targets below; Ubuntu/macOS hosts are only for source management.
 
 ## Build & Package
 
 ```sh
+# inside FreeBSD / OPNsense tools VM
 cd ~/tools
-make update                      # keep sources fresh
+make update
 cd plugins
-git clone git@github.com:Axis-Cyber-Technologies/axis-network-monitoring.git \
-  net/os-axis-network-monitor
-make list                        # optional sanity check
+# repository should already be cloned here
+make list                     # optional sanity check
 make generate
 cd net/os-axis-network-monitor
 make clean package
