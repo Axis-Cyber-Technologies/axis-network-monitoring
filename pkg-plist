@@ -1,4 +1,9 @@
 %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/GeneralController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/ConfigurationController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/ReportingController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/TelemetryController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/SecurityController.php
+%%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/AdvancedController.php
 %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Api/SettingsController.php
 %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Api/LogsController.php
 %%WWWDIR%%/app/controllers/OPNsense/AxisNetworkMonitor/Navigation/Menu.xml
@@ -7,6 +12,11 @@
 %%WWWDIR%%/app/models/OPNsense/AxisNetworkMonitor/AxisNetworkMonitor.xml
 %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general/index.volt
 %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general/setup.volt
+%%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/configuration/index.volt
+%%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/reporting/index.volt
+%%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/telemetry/index.volt
+%%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/security/index.volt
+%%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/advanced/index.volt
 %%WWWDIR%%/app/library/OPNsense/AxisNetworkMonitor/Logger.php
 %%WWWDIR%%/www/js/axisnetworkmonitor/setup.js
 %%WWWDIR%%/www/js/axisnetworkmonitor/logs.js
@@ -19,6 +29,11 @@
 %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/test_redis.php
 %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/test_fluentbit.php
 @dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general
+@dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/configuration
+@dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/reporting
+@dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/telemetry
+@dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/security
+@dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/advanced
 @dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor
 @dir %%WWWDIR%%/app/models/OPNsense/AxisNetworkMonitor
 @dir %%WWWDIR%%/app/models/OPNsense

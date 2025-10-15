@@ -16,6 +16,9 @@ WAN monitoring and policy orchestration on OPNsense.
   dashboard.
 - **Dev sandbox assets** – Docker Compose stack (ClickHouse, Redis, Fluent Bit,
   FastAPI worker) for rapid experimentation.
+- **Post-install setup console** – dedicated pages for Configuration, Reporting,
+  Telemetry, Security/IDS, and Advanced options (accessible under Reporting →
+  Axis Network Monitor) in addition to the guided wizard.
 
 ## Repository Layout
 

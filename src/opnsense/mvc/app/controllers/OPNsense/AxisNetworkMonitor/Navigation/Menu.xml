@@ -8,6 +8,50 @@
                 <visible>1</visible>
                 <icon>fa-area-chart</icon>
                 <match>/ui/axisnetworkmonitor/</match>
+                <children>
+                    <setup>
+                        <name>Setup Wizard</name>
+                        <url>/ui/axisnetworkmonitor/general/</url>
+                        <order>10</order>
+                        <visible>1</visible>
+                        <match>/ui/axisnetworkmonitor/general/</match>
+                    </setup>
+                    <configuration>
+                        <name>Configuration</name>
+                        <url>/ui/axisnetworkmonitor/configuration/</url>
+                        <order>20</order>
+                        <visible>1</visible>
+                        <match>/ui/axisnetworkmonitor/configuration/</match>
+                    </configuration>
+                    <reporting>
+                        <name>Reporting &amp; Data</name>
+                        <url>/ui/axisnetworkmonitor/reporting/</url>
+                        <order>30</order>
+                        <visible>1</visible>
+                        <match>/ui/axisnetworkmonitor/reporting/</match>
+                    </reporting>
+                    <telemetry>
+                        <name>Telemetry</name>
+                        <url>/ui/axisnetworkmonitor/telemetry/</url>
+                        <order>40</order>
+                        <visible>1</visible>
+                        <match>/ui/axisnetworkmonitor/telemetry/</match>
+                    </telemetry>
+                    <intrusion>
+                        <name>Security &amp; IDS</name>
+                        <url>/ui/axisnetworkmonitor/security/</url>
+                        <order>50</order>
+                        <visible>1</visible>
+                        <match>/ui/axisnetworkmonitor/security/</match>
+                    </intrusion>
+                    <advanced>
+                        <name>Advanced</name>
+                        <url>/ui/axisnetworkmonitor/advanced/</url>
+                        <order>60</order>
+                        <visible>1</visible>
+                        <match>/ui/axisnetworkmonitor/advanced/</match>
+                    </advanced>
+                </children>
             </axisnetworkmonitor>
         </reporting>
     </menu>

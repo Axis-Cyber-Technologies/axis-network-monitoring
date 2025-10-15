@@ -5,7 +5,9 @@ Monitor plugin after it has been installed.
 
 ## 1. Open the Plugin Page
 1. Log in to the OPNsense web interface.
-2. Navigate to **Reporting → Axis Network Monitor** in the left menu.
+2. Navigate to **Reporting → Axis Network Monitor** in the left menu. You will
+   see a submenu with **Setup Wizard**, **Configuration**, **Reporting & Data**,
+   **Telemetry**, **Security & IDS**, and **Advanced** options.
    - If the plugin was just installed, the setup wizard opens automatically.
    - If you see the dashboard instead, click **Launch Setup Wizard** (top right)
      to revisit the wizard at any time.
@@ -76,6 +78,17 @@ After completing the wizard you land on the Axis Network Monitor dashboard.
 - Reopen the wizard to re-run preflight checks and adjust settings later.
 - The plugin will continue to monitor requirements; revisit if services were
   stopped manually or hardware changes.
+
+### Additional Setup Pages
+- **Configuration** – quick link back to the wizard and, in future releases,
+  inline toggles for common options.
+- **Reporting & Data** – will expose retention policies and export options.
+- **Telemetry** – central place to check Fluent Bit status and metrics.
+- **Security & IDS** – planned home for policy orchestration and intrusion
+  detection tuning.
+- **Advanced** – will surface auto-update controls, scheduled jobs, and other
+  expert-level settings. These sections currently provide guidance and shortcuts
+  while deeper functionality is under construction.
 
 ## 4. Enabling / Disabling the Plugin
 - Use the **Enable services** toggle in Step 2 of the wizard or click the gear
