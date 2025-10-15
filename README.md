@@ -101,6 +101,9 @@ plugin state without reinstalling.
    prerequisites aren’t satisfied; once complete the dashboard displays the
    Activity Log and future widgets.
 
+For a click-by-click guide aimed at non-technical administrators, see
+`docs/USER_INSTALLATION.md`.
+
 ## Installing & Updating on Real Firewalls
 
 Follow `docs/DEPLOYMENT.md` for a full walkthrough on:
