@@ -56,6 +56,7 @@
             row.installed = data.installed;
             row.service_running = data.service_running;
             row.service_enabled = data.service_enabled;
+            row.suggested = data.suggested || null;
             row.busy = ko.observable(false);
 
             row.statusText = ko.computed(function() {
@@ -100,12 +101,18 @@
             row.canDisable = ko.computed(function() {
                 return !!row.service && row.service_enabled === true;
             });
+            row.hasSuggested = ko.computed(function() {
+                return !!row.suggested;
+            });
 
             row.install = function() {
                 parent.dependencyCommand(row, 'install');
             };
             row.enable = function() {
                 parent.dependencyCommand(row, 'enable');
+            };
+            row.disable = function() {
+                parent.dependencyCommand(row, 'disable');
             };
             row.start = function() {
                 parent.dependencyCommand(row, 'start');
@@ -116,8 +123,10 @@
             row.stop = function() {
                 parent.dependencyCommand(row, 'stop');
             };
-            row.disable = function() {
-                parent.dependencyCommand(row, 'disable');
+            row.applySuggested = function() {
+                if (row.suggested) {
+                    parent.applySuggestion(row.id, row.suggested);
+                }
             };
         }
 
@@ -152,6 +161,9 @@
 
         self.enabledSummary = ko.computed(function() {
             return self.form.general.enabled() ? gettext('Yes') : gettext('No');
+        });
+        self.onbootSummary = ko.computed(function() {
+            return self.form.general.onboot() ? gettext('Yes') : gettext('No');
         });
 
         self.canProceed = ko.computed(function() {
@@ -328,6 +340,14 @@
                     ok = resp.dependencies.overall_status === true;
                 }
                 self.dependencyRows(deps);
+                deps.forEach(function(row) {
+                    if (row.id === 'redis' && row.suggested) {
+                        self.applySuggestion('redis', row.suggested);
+                    }
+                    if (row.id === 'clickhouse' && row.suggested) {
+                        self.applySuggestion('clickhouse', row.suggested);
+                    }
+                });
                 self.prereqOk(ok);
 
                 if (resp && resp.hardware && resp.hardware.hardware) {
@@ -367,6 +387,103 @@
             }).always(function() {
                 row.busy(false);
                 setTimeout(function() { self.refreshPrerequisites(); }, 1000);
+            });
+        };
+
+        self.applySuggestion = function(id, suggestion) {
+            if (!suggestion) {
+                return;
+            }
+            if (id === 'redis') {
+                if (!self.form.redis.host() || self.form.redis.host() === 'localhost') {
+                    self.form.redis.host(suggestion.host || '127.0.0.1');
+                }
+                if (!self.form.redis.port() || self.form.redis.port() === 0) {
+                    self.form.redis.port(suggestion.port || 6379);
+                }
+                if (typeof suggestion.use_tls !== 'undefined') {
+                    self.form.redis.useTLS(!!suggestion.use_tls);
+                }
+            } else if (id === 'clickhouse') {
+                if (!self.form.clickhouse.host()) {
+                    self.form.clickhouse.host(suggestion.host || '127.0.0.1');
+                }
+                if (!self.form.clickhouse.port() || self.form.clickhouse.port() === 0) {
+                    self.form.clickhouse.port(suggestion.port || 8123);
+                }
+                if (typeof suggestion.use_tls !== 'undefined') {
+                    self.form.clickhouse.useTLS(!!suggestion.use_tls);
+                }
+            }
+        };
+
+        self.clickhouseTestStatus = {
+            running: ko.observable(false),
+            message: ko.observable(''),
+            success: ko.observable(null)
+        };
+
+        self.redisTestStatus = {
+            running: ko.observable(false),
+            message: ko.observable(''),
+            success: ko.observable(null)
+        };
+
+        self.testClickhouse = function() {
+            self.clickhouseTestStatus.running(true);
+            self.clickhouseTestStatus.message('');
+            self.clickhouseTestStatus.success(null);
+            $.ajax({
+                url: '/api/axisnetworkmonitor/settings/testClickhouse',
+                type: 'post',
+                data: {
+                    host: self.form.clickhouse.host(),
+                    port: self.form.clickhouse.port(),
+                    user: self.form.clickhouse.username(),
+                    password: self.form.clickhouse.password(),
+                    tls: self.form.clickhouse.useTLS() ? 1 : 0
+                }
+            }).done(function(resp) {
+                if (resp && resp.success) {
+                    self.clickhouseTestStatus.success(true);
+                    self.clickhouseTestStatus.message(gettext('Connection successful.'));
+                } else {
+                    self.clickhouseTestStatus.success(false);
+                    self.clickhouseTestStatus.message((resp && resp.error) || gettext('Connection failed.'));
+                }
+            }).fail(function(xhr) {
+                self.clickhouseTestStatus.success(false);
+                self.clickhouseTestStatus.message(xhr.responseText || gettext('Connection failed.'));
+            }).always(function() {
+                self.clickhouseTestStatus.running(false);
+            });
+        };
+
+        self.testRedis = function() {
+            self.redisTestStatus.running(true);
+            self.redisTestStatus.message('');
+            self.redisTestStatus.success(null);
+            $.ajax({
+                url: '/api/axisnetworkmonitor/settings/testRedis',
+                type: 'post',
+                data: {
+                    host: self.form.redis.host(),
+                    port: self.form.redis.port(),
+                    password: self.form.redis.password()
+                }
+            }).done(function(resp) {
+                if (resp && resp.success) {
+                    self.redisTestStatus.success(true);
+                    self.redisTestStatus.message(gettext('Redis responded: ') + (resp.response || 'PONG'));
+                } else {
+                    self.redisTestStatus.success(false);
+                    self.redisTestStatus.message((resp && resp.response) || gettext('Connection failed.'));
+                }
+            }).fail(function(xhr) {
+                self.redisTestStatus.success(false);
+                self.redisTestStatus.message(xhr.responseText || gettext('Connection failed.'));
+            }).always(function() {
+                self.redisTestStatus.running(false);
             });
         };
     }

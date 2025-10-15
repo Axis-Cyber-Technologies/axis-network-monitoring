@@ -70,6 +70,7 @@
                                 <th>{{ lang._('Dependency') }}</th>
                                 <th>{{ lang._('Status') }}</th>
                                 <th>{{ lang._('Details') }}</th>
+                                <th>{{ lang._('Suggested Defaults') }}</th>
                                 <th>{{ lang._('Actions') }}</th>
                             </tr>
                         </thead>
@@ -81,6 +82,17 @@
                                 </td>
                                 <td data-bind="text: statusText"></td>
                                 <td data-bind="text: message"></td>
+                                <td>
+                                    <div data-bind="visible: hasSuggested">
+                                        <code data-bind="text: suggested && suggested.host ? suggested.host : ''"></code>
+                                        <span data-bind="visible: suggested && suggested.port">:<span data-bind="text: suggested.port"></span></span>
+                                        <div>
+                                            <button class="btn btn-xs btn-default" data-bind="click: applySuggested">
+                                                {{ lang._('Apply to form') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td>
                                     <button class="btn btn-xs btn-default" data-bind="visible: canInstall, click: install, enable: !busy()">
                                         <i class="fa fa-download"></i> {{ lang._('Install') }}
@@ -168,10 +180,19 @@
                         <label><input type="checkbox" data-bind="checked: form.general.enabled" /> {{ lang._('Enable services on completion') }}</label>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>{{ lang._('Start services automatically on boot?') }}</label>
+                    <div class="checkbox">
+                        <label><input type="checkbox" data-bind="checked: form.general.onboot" /> {{ lang._('Enable auto-start for managed services') }}</label>
+                    </div>
+                </div>
             </div>
 
             <div data-bind="visible: step() === 3">
                 <h3>{{ lang._('ClickHouse Analytics Store') }}</h3>
+                <div class="alert" data-bind="visible: clickhouseTestStatus.message, css: clickhouseTestStatus.success() === true ? 'alert-success' : (clickhouseTestStatus.success() === false ? 'alert-danger' : 'alert-info')">
+                    <span data-bind="text: clickhouseTestStatus.message"></span>
+                </div>
                 <div class="form-group">
                     <label for="chHost">{{ lang._('Host') }}</label>
                     <input id="chHost" type="text" class="form-control" data-bind="value: form.clickhouse.host" />
@@ -197,10 +218,19 @@
                         <label><input type="checkbox" data-bind="checked: form.clickhouse.useTLS" /> {{ lang._('Use TLS (HTTPS) for ClickHouse connections') }}</label>
                     </div>
                 </div>
+                <div class="form-group">
+                    <button class="btn btn-default" data-bind="click: testClickhouse, enable: !clickhouseTestStatus.running()">
+                        <i class="fa" data-bind="css: clickhouseTestStatus.running() ? 'fa-refresh fa-spin' : 'fa-plug'"></i>
+                        {{ lang._('Test Connection') }}
+                    </button>
+                </div>
             </div>
 
             <div data-bind="visible: step() === 4">
                 <h3>{{ lang._('Redis Approval Queue') }}</h3>
+                <div class="alert" data-bind="visible: redisTestStatus.message, css: redisTestStatus.success() === true ? 'alert-success' : (redisTestStatus.success() === false ? 'alert-danger' : 'alert-info')">
+                    <span data-bind="text: redisTestStatus.message"></span>
+                </div>
                 <div class="form-group">
                     <label for="redisHost">{{ lang._('Host') }}</label>
                     <input id="redisHost" type="text" class="form-control" data-bind="value: form.redis.host" />
@@ -231,6 +261,12 @@
                     <label for="ingestNotes">{{ lang._('Notes') }}</label>
                     <textarea id="ingestNotes" class="form-control" rows="3" data-bind="value: form.ingestion.notes"></textarea>
                 </div>
+                <div class="form-group">
+                    <button class="btn btn-default" data-bind="click: testRedis, enable: !redisTestStatus.running()">
+                        <i class="fa" data-bind="css: redisTestStatus.running() ? 'fa-refresh fa-spin' : 'fa-plug'"></i>
+                        {{ lang._('Test Connection') }}
+                    </button>
+                </div>
             </div>
 
             <div data-bind="visible: step() === 5">
@@ -253,6 +289,10 @@
                         <tr>
                             <th>{{ lang._('Enable services') }}</th>
                             <td data-bind="text: enabledSummary"></td>
+                        </tr>
+                        <tr>
+                            <th>{{ lang._('Start services at boot') }}</th>
+                            <td data-bind="text: onbootSummary"></td>
                         </tr>
                     </tbody>
                 </table>

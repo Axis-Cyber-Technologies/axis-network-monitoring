@@ -12,7 +12,12 @@ $dependencies = [
         'service' => null,
         'enable_flag' => null,
         'required' => true,
-        'description' => 'Columnar analytics engine used for storing events.'
+        'description' => 'Columnar analytics engine used for storing events.',
+        'defaults' => [
+            'host' => '127.0.0.1',
+            'port' => 8123,
+            'use_tls' => false
+        ]
     ],
     [
         'id' => 'redis',
@@ -21,7 +26,12 @@ $dependencies = [
         'service' => 'redis',
         'enable_flag' => 'redis_enable',
         'required' => true,
-        'description' => 'Queue and cache backend for approvals and AI workflows.'
+        'description' => 'Queue and cache backend for approvals and AI workflows.',
+        'defaults' => [
+            'host' => '127.0.0.1',
+            'port' => 6379,
+            'use_tls' => false
+        ]
     ],
     [
         'id' => 'fluent-bit',
@@ -30,7 +40,12 @@ $dependencies = [
         'service' => 'fluent-bit',
         'enable_flag' => 'fluent_bit_enable',
         'required' => true,
-        'description' => 'Telemetry shipper that forwards OPNsense logs to ClickHouse.'
+        'description' => 'Telemetry shipper that forwards OPNsense logs to ClickHouse.',
+        'defaults' => [
+            'host' => '127.0.0.1',
+            'port' => 2021,
+            'use_tls' => false
+        ]
     ],
     [
         'id' => 'axis-repo',
@@ -88,6 +103,9 @@ foreach ($dependencies as $dependency) {
     }
 
     $status['service_running'] = $serviceRunning;
+
+    $defaults = $dependency['defaults'] ?? null;
+    $status['suggested'] = $defaults;
 
     if (!empty($dependency['enable_flag'])) {
         $flag = escapeshellarg($dependency['enable_flag']);

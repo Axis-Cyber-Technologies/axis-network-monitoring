@@ -15,6 +15,9 @@
 %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/hardware_profile.php
 %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/manage_dependency.php
 %%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/clear_log.sh
+%%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/test_clickhouse.php
+%%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/test_redis.php
+%%WWWDIR%%/scripts/OPNsense/AxisNetworkMonitor/test_fluentbit.php
 @dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor/general
 @dir %%WWWDIR%%/app/views/OPNsense/AxisNetworkMonitor
 @dir %%WWWDIR%%/app/models/OPNsense/AxisNetworkMonitor

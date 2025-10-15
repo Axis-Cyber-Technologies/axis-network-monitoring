@@ -8,9 +8,9 @@ installed and healthy.
 
 | Component | Purpose | Notes |
 |-----------|---------|-------|
-| `clickhouse` | Stores analytics, reports, and policy audit logs | Install via Axis repo (or upstream ClickHouse port). The plugin only needs HTTP access; a local client helps with troubleshooting. |
-| `redis` | Approval queue and cache | Ensure the Redis service is enabled at boot. The wizard checks `service redis onestatus`. |
-| `fluent-bit` | Collects OPNsense telemetry and forwards to ClickHouse | Deploy either on-box or on a log forwarder and point it at the configured ClickHouse endpoint. |
+| `clickhouse` | Stores analytics, reports, and policy audit logs | Install via Axis repo (or run externally). The wizard can test `/ping` before saving. |
+| `redis`/`os-redis` | Approval queue and cache | Community plugin `os-redis` satisfies this dependency. The wizard auto-detects it and can ping Redis. |
+| `fluent-bit` | Collects OPNsense telemetry and forwards to ClickHouse | Install via Axis repo or manage externally; the wizard can hit the metrics endpoint to confirm it is up. |
 | Axis pkg repo (`/usr/local/etc/pkg/repos/axis.conf`) | Supplies signed packages for ClickHouse/Fluent Bit if not in upstream repos | Optional but recommended for automated updates. |
 
 ## Optional / Future Integrations

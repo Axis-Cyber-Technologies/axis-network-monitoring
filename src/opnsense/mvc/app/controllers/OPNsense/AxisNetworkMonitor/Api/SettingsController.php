@@ -73,7 +73,7 @@ class SettingsController extends ApiMutableModelControllerBase
         }
 
         $action = $this->request->getPost('action', 'striptags', '');
-        $allowed = ['install', 'enable', 'start', 'restart', 'status'];
+        $allowed = ['install', 'enable', 'disable', 'start', 'stop', 'restart', 'status'];
 
         if (empty($id) || !in_array($action, $allowed, true)) {
             return ['success' => false, 'message' => gettext('Unsupported dependency action.')];
@@ -149,3 +149,79 @@ class SettingsController extends ApiMutableModelControllerBase
         Config::getInstance()->save();
     }
 }
+
+    public function testClickhouseAction(): array
+    {
+        if (!$this->request->isPost()) {
+            return ['success' => false, 'message' => gettext('Invalid method')];
+        }
+        $host = $this->request->getPost('host', 'striptags', '127.0.0.1');
+        $port = $this->request->getPost('port', 'int', 8123);
+        $user = $this->request->getPost('user', 'striptags', '');
+        $password = $this->request->getPost('password', null, '');
+        $tls = $this->request->getPost('tls', 'int', 0) ? 'true' : 'false';
+
+        $backend = new Backend();
+        $cmd = sprintf(
+            'axisnetworkmonitor clickhouse-test %s %s %s %s %s',
+            escapeshellarg($host),
+            escapeshellarg((string)$port),
+            escapeshellarg($user),
+            escapeshellarg($password ?? ''),
+            escapeshellarg($tls)
+        );
+        $json = $backend->configdRun($cmd);
+        $data = json_decode($json, true);
+        if (is_array($data)) {
+            return $data;
+        }
+        return ['success' => false, 'message' => gettext('Unable to parse ClickHouse test result.'), 'raw' => $json];
+    }
+
+    public function testRedisAction(): array
+    {
+        if (!$this->request->isPost()) {
+            return ['success' => false, 'message' => gettext('Invalid method')];
+        }
+        $host = $this->request->getPost('host', 'striptags', '127.0.0.1');
+        $port = $this->request->getPost('port', 'int', 6379);
+        $password = $this->request->getPost('password', null, '');
+
+        $backend = new Backend();
+        $cmd = sprintf(
+            'axisnetworkmonitor redis-test %s %s %s',
+            escapeshellarg($host),
+            escapeshellarg((string)$port),
+            escapeshellarg($password ?? '')
+        );
+        $json = $backend->configdRun($cmd);
+        $data = json_decode($json, true);
+        if (is_array($data)) {
+            return $data;
+        }
+        return ['success' => false, 'message' => gettext('Unable to parse Redis test result.'), 'raw' => $json];
+    }
+
+    public function testFluentbitAction(): array
+    {
+        if (!$this->request->isPost()) {
+            return ['success' => false, 'message' => gettext('Invalid method')];
+        }
+        $host = $this->request->getPost('host', 'striptags', '127.0.0.1');
+        $port = $this->request->getPost('port', 'int', 2021);
+        $tls = $this->request->getPost('tls', 'int', 0) ? 'true' : 'false';
+
+        $backend = new Backend();
+        $cmd = sprintf(
+            'axisnetworkmonitor fluentbit-test %s %s %s',
+            escapeshellarg($host),
+            escapeshellarg((string)$port),
+            escapeshellarg($tls)
+        );
+        $json = $backend->configdRun($cmd);
+        $data = json_decode($json, true);
+        if (is_array($data)) {
+            return $data;
+        }
+        return ['success' => false, 'message' => gettext('Unable to parse Fluent Bit test result.'), 'raw' => $json];
+    }

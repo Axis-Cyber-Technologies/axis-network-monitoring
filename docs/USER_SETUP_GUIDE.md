@@ -20,23 +20,30 @@ The wizard has five steps; all mandatory checks must pass before you can finish.
   - Firewall hardware meets minimum specs.
 - Use the action buttons next to each dependency (Install/Start/Enable/Stop) to
   fix issues. The plugin runs the necessary commands for you.
+- If a dependency is already present, click **Apply to form** to pre-fill the
+  later wizard steps with the detected defaults (e.g. `127.0.0.1:6379`).
 - Review the detected hardware profile and compare it to the recommended tiers.
 
 ### Step 2 – General Settings
 - **Display Name**: title shown on the dashboard (default: Axis Network Monitor).
 - **Enable services on completion**: leave checked to turn the plugin on after
   setup; uncheck if you want to set it up but keep services off for now.
+- **Start services automatically on boot**: controls whether Redis and Fluent
+  Bit are enabled at startup.
 
 ### Step 3 – ClickHouse Connection
 - Provide the hostname/IP, port, database, username, and password for your
-  ClickHouse analytics server.
+  ClickHouse analytics server (defaults appear if a local instance is detected).
 - Tick **Use TLS** if the server requires HTTPS.
+- Click **Test Connection** to confirm credentials before continuing.
 
 ### Step 4 – Redis Connection
-- Enter credentials for the Redis instance handling approval queues.
+- Enter credentials for the Redis instance handling approval queues (defaults
+  appear automatically when the community `os-redis` plugin is installed).
 - Toggle **Use TLS** for secure connections.
 - Optionally mark whether Fluent Bit telemetry agents are already deployed and
   add notes to track external setup tasks.
+- Click **Test Connection** to verify Redis responds (expects `PONG`).
 
 ### Step 5 – Summary
 - Review all values. If something looks wrong, click **Back** to adjust.
