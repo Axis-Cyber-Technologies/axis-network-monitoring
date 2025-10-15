@@ -1,68 +1,105 @@
-# Axis Network Monitor (Hello World)
+# Axis Network Monitor – Axis Cyber Technologies
 
-This repository contains the skeleton for an OPNsense plugin named
-`os-axis-network-monitor`. At the moment it only exposes a **Hello World**
-page so that you can validate the packaging and installation workflow before
-building richer LAN/WAN monitoring capabilities.
+Axis Network Monitor (`os-axis-network-monitor`) delivers a setup wizard,
+dependency automation, and an operational logging framework for building LAN/
+WAN monitoring and policy orchestration on OPNsense.
+
+## Key Capabilities
+
+- **Onboarding wizard** – collects ClickHouse, Redis, and ingestion endpoints;
+  runs prerequisite checks (packages, services, hardware) before enabling the
+  plugin.
+- **Dependency automation** – install/enable/start local Redis & Fluent Bit
+  services directly from the UI or via `configctl`.
+- **Activity logging** – structured JSON log stored at
+  `/var/log/axisnetworkmonitor.log` with live viewer + clear button in the
+  dashboard.
+- **Dev sandbox assets** – Docker Compose stack (ClickHouse, Redis, Fluent Bit,
+  FastAPI worker) for rapid experimentation.
 
 ## Repository Layout
 
 ```
-Makefile               Port definition consumed by the OPNsense build system
-pkg-descr              One-line package description
-pkg-plist              Files installed by the package
-src/
-  opnsense/
-    mvc/
-      app/
-        controllers/
-          OPNsense/
-            AxisNetworkMonitor/
-              GeneralController.php   UI controller rendering the page
-              Navigation/Menu.xml     Adds the entry to the OPNsense menu tree
-              acl.xml                 Declares the UI privilege name
-        views/
-          OPNsense/
-            AxisNetworkMonitor/
-              general/
-                index.volt            Volt template printing “Hello World”
+Makefile                 Plugin metadata consumed by OPNsense tools
+pkg-descr                Short description
+pkg-plist                Files installed by the package
+src/opnsense/            MVC controllers, models, views, configd actions
+src/opnsense/scripts/    Helper scripts (dependency checks, toggle enable)
+src/opnsense/www/js/     Knockout view models for wizard & logs
+configs/                 Fluent Bit configs + parsers for local testing
+services/                FastAPI + worker prototypes (analytics/approvals)
+sql/                     ClickHouse schema definitions
+docs/                    Deployment, dependencies, logging, dev stack, etc.
+docker-compose.yml       Local analytics sandbox (ClickHouse/Redis/Fluent Bit)
 ```
 
-## Local Build & Test
+## Prerequisites
 
-1. Place the plugin directory under the official OPNsense plugins tree
-   (e.g. `/usr/tools/plugins/net/os-axis-network-monitor`) or clone this repo
-   next to the other plugins.
-2. From the root of the plugins tree run `make list` once to ensure the
-   toolchain is available, then build just this plugin:
+### OPNsense Build Environment
 
-   ```sh
-   make generate
-   cd net/os-axis-network-monitor
-   make package
-   ```
+Building packages must be done inside the official tools tree (FreeBSD/OPNsense
+environment):
 
-   The resulting package (`os-axis-network-monitor-*.pkg`) will be placed in
-   `work/pkg/`.
+```sh
+git clone https://github.com/opnsense/tools.git ~/tools
+cd ~/tools
+make update            # fetch base + ports
+```
 
-## Installation on an OPNsense Appliance
+Clone this repository under `tools/plugins/net/os-axis-network-monitor`.
 
-1. Copy the generated `.pkg` file to your OPNsense firewall (for example with
-   `scp`).
-2. Install it using the firmware CLI:
+### Host Requirements
+
+| Host OS | Required tools |
+|---------|----------------|
+| **Ubuntu 22.04+** | `sudo apt install git build-essential python3 ca-certificates` |
+| **macOS (12+)** | `brew install git gnu-sed gnu-tar cmake` and ensure Rosetta/Intel shell for FreeBSD VM if on Apple Silicon |
+
+> 💡 For macOS we recommend running the OPNsense `tools` tree inside a FreeBSD
+> VM (e.g. via UTM/VirtualBox). The host packages above cover repo management
+> and editing; building still occurs inside the FreeBSD VM.
+
+## Build & Package
+
+```sh
+cd ~/tools
+make update                      # keep sources fresh
+cd plugins
+git clone git@github.com:Axis-Cyber-Technologies/axis-network-monitoring.git \
+  net/os-axis-network-monitor
+make list                        # optional sanity check
+make generate
+cd net/os-axis-network-monitor
+make clean package
+```
+
+Packages are emitted into `work/pkg/os-axis-network-monitor-*.pkg`.
+
+### Rapid Iteration
+
+For small tweaks you can copy the `src/opnsense` subtree onto a test firewall
+and reload templates:
+
+```sh
+scp -r src/opnsense root@fw:/usr/local/www/opnsense/
+ssh root@fw 'configctl template reload OPNsense.AxisNetworkMonitor'
+```
+
+Use `configctl axisnetworkmonitor enable-toggle enable|disable` to flip the
+plugin state without reinstalling.
+
+## Install on an OPNsense Appliance
+
+1. Copy the `.pkg` file to the firewall (`scp` or SFTP).
+2. Install via firmware shell:
 
    ```sh
    opnsense-shell pkg install ./os-axis-network-monitor-0.0.1.pkg
    ```
 
-3. Log in to the web UI, navigate to **Reporting → Axis Network Monitor**, and
-   you should see the “Hello World” page.
-
-To iterate quickly during development you may also copy the `src/opnsense`
-subtree straight into `/usr/local/www/opnsense/` on a test box and run
-`configctl template reload OPNsense.AxisNetworkMonitor` afterwards, but the
-packaging approach above mirrors how the plugin will be distributed once it is
-ready.
+3. Open **Reporting → Axis Network Monitor**. The setup wizard will launch if
+   prerequisites aren’t satisfied; once complete the dashboard displays the
+   Activity Log and future widgets.
 
 ## Installing & Updating on Real Firewalls
 
@@ -108,6 +145,7 @@ dependencies:
   and Fluent Bit services, and marks them to start on boot.
 - Turning it **off** stops those services, disables their boot flags, and
   updates the plugin config accordingly.
+
 
 You can also trigger the same behaviour via `configctl
 axisnetworkmonitor enable-toggle enable|disable`.
